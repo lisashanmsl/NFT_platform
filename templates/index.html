@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>發行 NFT</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="container mt-5">
+    <h1>🎨 發行你的 NFT</h1>
+    <form action="/mint" method="POST" enctype="multipart/form-data" class="mb-4">
+        <div class="mb-3">
+            <label for="file" class="form-label">圖片：</label>
+            <input type="file" name="file" id="file" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="name" class="form-label">NFT 名稱：</label>
+            <input type="text" name="name" id="name" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">描述：</label>
+            <textarea name="description" id="description" rows="4" class="form-control" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="address" class="form-label">接收地址（錢包）：</label>
+            <input type="text" name="address" id="address" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">價格 (ETH)：</label>
+            <input type="number" name="price" id="price" step="0.01" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">發行 NFT</button>
+    </form>
+
+    <!-- 新增按鈕，跳轉到歷史 NFT 頁面 -->
+    <a href="/history" class="btn btn-secondary">查看歷史 NFT</a>
+    <a id="myNftsLink" href="#" class="btn btn-dark">🖼️ 我的 NFT</a>
+
+    <script>
+        // 使用 MetaMask 獲取當前連接的錢包地址
+        async function setMyNftsLink() {
+            if (window.ethereum) {
+                try {
+                    // 請求連接 MetaMask
+                    await window.ethereum.request({ method: "eth_requestAccounts" });
+                    const accounts = await window.ethereum.request({ method: "eth_accounts" });
+                    const ownerAddress = accounts[0]; // 獲取第一個錢包地址
+                    document.getElementById("myNftsLink").href = `/my_nfts?owner=${ownerAddress}`;
+                } catch (error) {
+                    console.error("無法獲取地址:", error);
+                }
+            } else {
+                alert("請安裝 MetaMask 擴充套件");
+            }
+        }
+
+        // 初始化
+        setMyNftsLink();
+    </script>
+</body>
+
+</html>
